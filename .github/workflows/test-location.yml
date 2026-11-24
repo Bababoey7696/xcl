@@ -48,3 +48,7 @@ jobs:
       - name: Test fix with PowerShell 7
         shell: pwsh
         run: ./scripts/test-native-stderr.tests.ps1
+
+      - name: Build and test XCL (Windows, no GPU)
+        shell: pwsh
+        run: ./scripts/test.ps1 --skip test_title_runs_and_game_folder_is_untouched
