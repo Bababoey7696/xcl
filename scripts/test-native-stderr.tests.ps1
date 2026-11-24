@@ -23,8 +23,17 @@ exit /b 127
     $env:PATH = $fixture
     if ((Get-Command cargo).Path -ne $cargo) { throw 'The native Cargo fixture was not selected.' }
 
+        $originalLocation = (Get-Location).Path
+
     & $runner *> $log
-    if ($LASTEXITCODE -ne 0) { throw "Runner exited $LASTEXITCODE on a successful build." }
+
+    if ($LASTEXITCODE -ne 0) {
+        throw "Runner exited $LASTEXITCODE on a successful build."
+    }
+
+    if ((Get-Location).Path -ne $originalLocation) {
+        throw 'test.ps1 changed the caller working directory.'
+    }
     $output = Get-Content -LiteralPath $log -Raw
     if (!$output.Contains('synthetic build progress') -or
         !$output.Contains('GPU tests skipped on this adapter: 1 (synthetic reason)')) {
