@@ -2,6 +2,7 @@
 # Arguments go to the test binaries (after `--`), e.g. `.\scripts\test.ps1 --skip <name>`.
 $ErrorActionPreference = 'Stop'
 Set-Location (Join-Path $PSScriptRoot '..')
+try {
 # tests on game data pass without running anything when their variable is not set
 $missing = 'XCL_SAMPLE_RPF', 'XCL_SAMPLE_DLLS', 'XCL_SAMPLE_TTPF', 'XCL_SAMPLE_BK2', 'XCL_SAMPLE_BVH4', 'XCL_SAMPLE_AWC', 'XCL_SAMPLE_XG', 'XCL_SAMPLE_DXC' | Where-Object { -not (Test-Path "env:$_") }
 if ($missing) { Write-Host "not set, their tests are skipped: $($missing -join ', ')" }
@@ -22,5 +23,8 @@ $code = $LASTEXITCODE
 if ($skipped) {
     $counts = $skipped | Group-Object | Sort-Object Count -Descending | ForEach-Object { "$($_.Count) ($($_.Name))" }
     Write-Host "GPU tests skipped on this adapter: $($counts -join ', ')"
+}
+} finally {
+    Pop-Location
 }
 exit $code
