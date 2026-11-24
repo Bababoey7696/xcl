@@ -9,7 +9,7 @@
 # Render Driver (4-lane waves): the launcher warns about both, which that test treats as a
 # failure. It still runs in `scripts/test.ps1` on a PC.
 name: CI
-
+workflow_dispatch:
 on:
   push:
     branches: [main]
