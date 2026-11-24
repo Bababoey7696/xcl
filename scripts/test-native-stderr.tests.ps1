@@ -22,8 +22,9 @@ exit /b 127
 '@ | Set-Content -LiteralPath $cargo -Encoding Ascii
     $env:PATH = $fixture
     if ((Get-Command cargo).Path -ne $cargo) { throw 'The native Cargo fixture was not selected.' }
-
-        $originalLocation = (Get-Location).Path
+    # Run outside the repository so a leaked Set-Location is observable.
+    Set-Location -LiteralPath $fixture
+    $originalLocation = (Get-Location).Path
 
     & $runner *> $log
 
