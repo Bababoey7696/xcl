@@ -1,0 +1,22 @@
+name: Test working directory fix
+
+on:
+  push:
+    branches:
+      - fix/test-location
+
+jobs:
+  test:
+    name: PowerShell regression tests
+    runs-on: windows-2025
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Test with Windows PowerShell 5.1
+        shell: powershell
+        run: ./scripts/test-native-stderr.tests.ps1
+
+      - name: Test with PowerShell 7
+        shell: pwsh
+        run: ./scripts/test-native-stderr.tests.ps1
